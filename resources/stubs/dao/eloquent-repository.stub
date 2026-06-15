@@ -1,0 +1,60 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+use {{ interfaceNamespace }}\{{ interface }};
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
+class {{ class }} implements {{ interface }}
+{
+    public function __construct(
+        protected {{ model }} $model,
+    ) {
+    }
+
+    public function query(): Builder
+    {
+        return $this->model->newQuery();
+    }
+
+    public function all(): Collection
+    {
+        return $this->query()->get();
+    }
+
+    public function paginate(int $perPage = 15): LengthAwarePaginator
+    {
+        return $this->query()->paginate($perPage);
+    }
+
+    public function find(int|string $id): ?{{ model }}
+    {
+        return $this->query()->find($id);
+    }
+
+    public function findOrFail(int|string $id): {{ model }}
+    {
+        return $this->query()->findOrFail($id);
+    }
+
+    public function create(array $attributes): {{ model }}
+    {
+        return $this->model->newInstance()->create($attributes);
+    }
+
+    public function update({{ model }} $model, array $attributes): {{ model }}
+    {
+        $model->fill($attributes);
+        $model->save();
+
+        return $model;
+    }
+
+    public function delete({{ model }} $model): bool
+    {
+        return (bool) $model->delete();
+    }
+}

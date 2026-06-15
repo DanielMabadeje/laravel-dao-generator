@@ -1,0 +1,81 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+use {{ interfaceNamespace }}\{{ interface }};
+use {{ dtoNamespace }}\{{ dto }};
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * Data access layer for {{ model }}.
+ *
+ * Orchestrates repository calls and wraps results in {{ dto }} objects.
+ * Keep this layer free of business rules — those belong in {{ service }}.
+ */
+class {{ class }}
+{
+    public function __construct(
+        protected {{ interface }} $repository,
+    ) {
+    }
+
+    public function all(): Collection
+    {
+        return $this->repository->all()->map(
+            fn ({{ model }} $model) => {{ dto }}::fromModel($model)
+        );
+    }
+
+    public function paginate(int $perPage = 15): LengthAwarePaginator
+    {
+        $paginator = $this->repository->paginate($perPage);
+
+        $paginator->setCollection(
+            $paginator->getCollection()->map(
+                fn ({{ model }} $model) => {{ dto }}::fromModel($model)
+            )
+        );
+
+        return $paginator;
+    }
+
+    public function find(int|string $id): ?{{ dto }}
+    {
+        $model = $this->repository->find($id);
+
+        return $model ? {{ dto }}::fromModel($model) : null;
+    }
+
+    public function findOrFail(int|string $id): {{ dto }}
+    {
+        return {{ dto }}::fromModel($this->repository->findOrFail($id));
+    }
+
+    public function create(array $attributes): {{ dto }}
+    {
+        return DB::transaction(
+            fn () => {{ dto }}::fromModel($this->repository->create($attributes))
+        );
+    }
+
+    public function update(int|string $id, array $attributes): {{ dto }}
+    {
+        return DB::transaction(function () use ($id, $attributes) {
+            $model = $this->repository->findOrFail($id);
+
+            return {{ dto }}::fromModel($this->repository->update($model, $attributes));
+        });
+    }
+
+    public function delete(int|string $id): bool
+    {
+        return DB::transaction(function () use ($id) {
+            $model = $this->repository->findOrFail($id);
+
+            return $this->repository->delete($model);
+        });
+    }
+}

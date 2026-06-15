@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Support\ServiceProvider;
+
+class {{ class }} extends ServiceProvider
+{
+    /**
+     * Interface => Implementation bindings.
+     *
+     * Entries below this line are managed automatically by
+     * `php artisan make:dao`. You may add your own bindings too —
+     * the generator only inserts new lines, it never removes existing ones.
+     */
+    public array $bindings = [
+        // dao-generator:bindings-start
+        // dao-generator:bindings-end
+    ];
+
+    public function register(): void
+    {
+        foreach ($this->bindings as $interface => $implementation) {
+            $this->app->bind($interface, $implementation);
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "name": "danielmabadeje/laravel-dao-generator",
+    "description": "Scaffold Service -> DAO -> RepositoryInterface -> EloquentRepository -> Model architecture for Laravel with a single artisan command.",
+    "keywords": ["laravel", "dao", "repository", "service", "generator", "artisan", "scaffold"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Daniel Mabadeje",
+            "email": "you@example.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/console": "^10.0|^11.0|^12.0",
+        "illuminate/database": "^10.0|^11.0|^12.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DanielMabadeje\\LaravelDaoGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DanielMabadeje\\LaravelDaoGenerator\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DanielMabadeje\\LaravelDaoGenerator\\DaoGeneratorServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

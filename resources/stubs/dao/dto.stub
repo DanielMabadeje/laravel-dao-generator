@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+
+final class {{ class }}
+{
+    public function __construct(
+        public readonly int|string $id,
+        public readonly array $attributes = [],
+    ) {
+    }
+
+    public static function fromModel({{ model }} $model): self
+    {
+        return new self(
+            id: $model->getKey(),
+            attributes: $model->attributesToArray(),
+        );
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(['id' => $this->id], $this->attributes);
+    }
+}

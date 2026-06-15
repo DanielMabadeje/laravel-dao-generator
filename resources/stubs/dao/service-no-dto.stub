@@ -1,0 +1,58 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+use {{ daoNamespace }}\{{ dao }};
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+
+/**
+ * Business logic layer for {{ model }}.
+ *
+ * Controllers and jobs should depend on this class, not on {{ dao }}
+ * or the repository directly. Add validation orchestration, events,
+ * and cross-cutting concerns here.
+ */
+class {{ class }}
+{
+    public function __construct(
+        protected {{ dao }} $dao,
+    ) {
+    }
+
+    public function list(): Collection
+    {
+        return $this->dao->all();
+    }
+
+    public function paginate(int $perPage = 15): LengthAwarePaginator
+    {
+        return $this->dao->paginate($perPage);
+    }
+
+    public function find(int|string $id): ?{{ model }}
+    {
+        return $this->dao->find($id);
+    }
+
+    public function findOrFail(int|string $id): {{ model }}
+    {
+        return $this->dao->findOrFail($id);
+    }
+
+    public function create(array $attributes): {{ model }}
+    {
+        return $this->dao->create($attributes);
+    }
+
+    public function update(int|string $id, array $attributes): {{ model }}
+    {
+        return $this->dao->update($id, $attributes);
+    }
+
+    public function delete(int|string $id): bool
+    {
+        return $this->dao->delete($id);
+    }
+}
