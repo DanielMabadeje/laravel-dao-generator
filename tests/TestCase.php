@@ -12,9 +12,9 @@ abstract class TestCase extends BaseTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->files = new Filesystem();
+
+        parent::setUp();
     }
 
     protected function tearDown(): void
@@ -57,18 +57,20 @@ abstract class TestCase extends BaseTestCase
      */
     protected function defineRoutes($router): void
     {
+        $files = new Filesystem();
+
         $bootstrapDir = base_path('bootstrap');
-        $this->files->ensureDirectoryExists($bootstrapDir);
+        $files->ensureDirectoryExists($bootstrapDir);
 
         $providersFile = $bootstrapDir . '/providers.php';
-        if (! $this->files->exists($providersFile)) {
-            $this->files->put($providersFile, "<?php\n\nreturn [\n    App\\Providers\\AppServiceProvider::class,\n];\n");
+        if (! $files->exists($providersFile)) {
+            $files->put($providersFile, "<?php\n\nreturn [\n    App\\Providers\\AppServiceProvider::class,\n];\n");
         }
 
         $appServiceProvider = app_path('Providers/AppServiceProvider.php');
-        if (! $this->files->exists($appServiceProvider)) {
-            $this->files->ensureDirectoryExists(app_path('Providers'));
-            $this->files->put($appServiceProvider, "<?php\n\nnamespace App\\Providers;\n\nuse Illuminate\\Support\\ServiceProvider;\n\nclass AppServiceProvider extends ServiceProvider\n{\n    public function register(): void {}\n    public function boot(): void {}\n}\n");
+        if (! $files->exists($appServiceProvider)) {
+            $files->ensureDirectoryExists(app_path('Providers'));
+            $files->put($appServiceProvider, "<?php\n\nnamespace App\\Providers;\n\nuse Illuminate\\Support\\ServiceProvider;\n\nclass AppServiceProvider extends ServiceProvider\n{\n    public function register(): void {}\n    public function boot(): void {}\n}\n");
         }
     }
 }
